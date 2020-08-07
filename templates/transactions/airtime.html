@@ -1,0 +1,21 @@
+{% extends 'base.html' %}
+{% block content %}
+<h4 align="center">Buy Airtime</h4>
+<div align="center">
+    <form method="POST">{% csrf_token %}
+        <fieldset>
+            {{ form.as_p}}
+            <div class="form-group">
+                <label class='control-label'>&nbsp;</label>
+                <input type="submit" value="Buy" class="btn btn-primary" >
+                <!-- <span class="input-group-addon libspicker" onclick="viewVendor()" 'id'="pickerNo">Save</span> -->
+                </div>
+        
+        </fieldset>
+           
+        </form>
+</div>
+
+
+
+{% endblock %}

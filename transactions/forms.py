@@ -13,6 +13,31 @@ class TransactionForm(forms.ModelForm):
             'reference', 
 
         ]
+
+class TransactionAirtime(forms.Form):
+    CHOICES= (
+            ('Netone', 'Netone'),
+            ('Econet', 'Econet'),
+            ('Telecel', 'Telecel'),
+        )
+    provider = forms.CharField(widget=forms.Select(choices=CHOICES,
+    attrs={
+            "class":"col-md-4 form-control",
+        }
+        ))
+
+
+    recipient = forms.IntegerField(widget= forms.NumberInput(
+        attrs={
+            "class":"col-md-4 form-control",
+            
+        }
+    ))
+    amount = forms.DecimalField(widget= forms.NumberInput(
+        attrs={
+            "class":"col-md-4 form-control"
+        }
+    ))
 class TransactionCreate(forms.Form):
     user_id = forms.IntegerField(widget= forms.NumberInput(
         attrs={

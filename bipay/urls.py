@@ -15,7 +15,7 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path
-from transactions.views import home_view , create_transaction , view_transaction 
+from transactions.views import home_view , create_transaction , view_transaction , statement_transaction, airtime_transaction
 from face.views import home_face ,  register ,login
 from account.views import balance
 
@@ -28,10 +28,12 @@ urlpatterns = [
     #transactions
     path('transaction/create/', create_transaction),
     path('transaction/view/', view_transaction),
+    path('transaction/statement/', statement_transaction),
+     path('transaction/airtime/', airtime_transaction),
     #admin
     path('admin/', admin.site.urls),
     #account
-    path('account/balance', balance ,name='account'),
+    path('account/balance/', balance ,name='account'),
 
    
     
