@@ -1,0 +1,47 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<h1 align="center">Transactions</h1>
+
+
+<div class="col-lg-12 grid-margin stretch-card">
+    <div class="card">
+      <div class="card-body">
+        <h4 class="card-title">Transactions</h4>
+        <p class="card-description"> View Transactions <code></code>
+        </p>
+        <table class="table table-striped">
+          <thead>
+            <tr>
+              <th> User id</th>
+              <th> Amount </th>
+              <th> Date </th>
+              <th> Account </th>
+              <th> Reference </th>
+            </tr>
+          </thead>
+          <tbody>
+
+          {% for transaction in transactions %}
+            <tr>
+              <td class="py-1">
+                {{ transaction.user_id }}
+                <!-- <img src="../../assets/images/faces-clipart/pic-1.png" alt="image" /> -->
+              </td>
+              <td>{{ transaction.amount }} </td>
+              <td>
+                {{ transaction.date }}
+              </td>
+              <td> {{ transaction.account }} </td>
+              <td> {{ transaction.reference }}</td>
+            </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+{% endblock %}
+

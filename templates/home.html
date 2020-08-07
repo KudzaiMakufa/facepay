@@ -1,0 +1,11 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<h1>Hello World </h1>
+{{user.email}}
+<p>THis is a template </p>
+{% load static %}
+<img src="{% static 'kudzi.png' %}" alt="My image">
+
+
+{% endblock %}

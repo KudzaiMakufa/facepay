@@ -1,0 +1,128 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<style>
+    #project_type_code{
+    
+        width: 40%
+    
+    
+    }
+    .label{
+        align: center;
+    }
+    .libspicker {
+        cursor: pointer;
+        background: #5762ff;
+        color: #fff;
+        border: none;
+        width: 9%;
+        height: 34px; 
+        float: left;
+        border-radius: 25px
+    </style>
+    <script>
+    
+        
+        
+        function check()
+        {
+            var longi = document.getElementById('long').value;
+            var lati = document.getElementById('lati').value;
+            var longbut=false;
+            var latibut = false;
+            
+            if(longi==0||longi==0.||lati==0 ||lati==0.)
+            {
+                document.getElementById('mysubmit').disabled=true;
+            }
+            if(longi!=0.0)
+            {
+                if(isNaN(longi))
+                {
+                    var a =document.getElementById('myerror');
+                    a.innerHTML='Your longitude is not a number';
+                    a.style.display='block';
+                    document.getElementById('mysubmit').disabled=true;				
+                }
+                else
+                {
+                    longbut= true;	
+                }
+            }
+            
+            if(lati!=0.0)
+            {
+                if(isNaN(lati))
+                {
+                    var a =document.getElementById('myerror');
+                    a.innerHTML='Your latitude is not a number';
+                    a.style.display='block';
+                    document.getElementById('mysubmit').disabled=true;				
+                }
+                else
+                {
+                    latibut= true;	
+                }
+            }
+            if(longbut==true && latibut==true)
+            {
+                document.getElementById('mysubmit').disabled=false;	
+                var a =document.getElementById('myerror');
+                    
+                    a.style.display='none';	
+            }
+        }
+    </script>
+    
+    <div class="col-md-12 col-sm-12 col-xs-12">
+        <div class="x_panel">
+            <div class="x_title">
+                <h2 align="center">Face Detection</h2>
+                <div class="clearfix"></div>
+            </div>
+            <div class="x_content">
+                <br/>
+                
+                <form class="form-horizontal" method="post">{% csrf_token %} 
+                
+                <div class="alert alert-danger col-md-10" id="myerror" style="display:none"></div>
+    
+    
+                
+                <div class="form-group">
+                <label class="control-label col-md-3 col-sm-3 col-xs-12">Verify</label>
+    
+    
+                <input type="text" name="project_type_code" class="col-md-4 form-control" id="project_type_code" placeholder="verify" disabled="disabled">
+    
+                <input  name="project_type"  id="project_type" type="hidden">
+                    
+    
+                
+    
+                    <span class="input-group-addon libspicker" onclick="viewVendor()" 'id'="pickerNo">Pick</span>
+    
+                </div>
+                
+    
+                
+        
+                
+                
+              
+            </div>
+        </div>
+    </div>
+    <div align="center">
+        {% include "face/modal_face.html" %}
+    </div>
+
+</form>
+    <script>
+        function viewVendor()
+             {
+                $('#viewTypes').modal();
+            }
+    </script>
+    {% endblock %}
