@@ -94,10 +94,10 @@ from django.contrib.auth.decorators import login_required
               </a>
               <div class="collapse" id="ui-basic">
                 <ul class="nav flex-column sub-menu">
-                  <li class="nav-item"> <a class="nav-link" href="/message/">Deposit</a></li>
+                  <li class="nav-item"> <a class="nav-link" href="#">Placeholder</a></li>
                   <li class="nav-item"> <a class="nav-link" href="/transaction/view/">My Transactions</a></li>
-                  <li class="nav-item"> <a class="nav-link" href="#">View Reports</a></li>
-                  <li class="nav-item"> <a class="nav-link" href="/transaction/statement/">Statement</a></li>
+                
+                  <li class="nav-item"> <a class="nav-link" href="/statement/view/">Statement</a></li>
                   <li class="nav-item"> <a class="nav-link" href="/transaction/create/">Send money</a></li>
                   <li class="nav-item"> <a class="nav-link" href="/transaction/airtime/">Buy Airtime</a></li>
                   <li class="nav-item"> <a class="nav-link" href="/account/balance/">Check Balance</a></li>
@@ -116,9 +116,31 @@ from django.contrib.auth.decorators import login_required
         <div class="main-panel">
           <div class="content-wrapper">
 
-
+            {% if messages %}
+                <ul class="messages">
+                    {% for message in messages %}
+                      {% if message.tags == 'info'%}
+                        <div class="alert alert-success">
+                          <strong>{{ message.tags }}</strong>
+                          <p>
+                            {{ message }}
+                          </p>
+                        </div>
+                      {% else %}
+                      <div class="alert alert-danger">
+                        <strong>{{ message.tags }}</strong>
+                        <p>
+                          {{ message }}
+                        </p>
+                      </div>
+                      {% endif %}
+                    <!-- <li{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message.tags }}</li> -->
+                    {% endfor %}
+                </ul>
+                {% endif %}
             {% block content %}
-            replace me 
+            
+         
             {% endblock %}
           <!-- content-wrapper ends -->
           <!-- partial:partials/_footer.html -->

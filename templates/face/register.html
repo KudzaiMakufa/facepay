@@ -29,21 +29,21 @@
                 <div class="brand-logo" align="center">
                   <img src="{% static "landing/images/logo1.png" %}" alt="Logo here">
                 </div>
-                <h4>Sign up below</h4>
+                <h4>Sign up </h4>
                 <h6 class="font-weight-light"></h6>
                 <form class="pt-3" method="POST">{% csrf_token %}
                   <div class="form-group">
-                    <input type="text" name="username" class="form-control form-control-lg" id="exampleInputUsername1" placeholder="Username">
+                    <input type="text" name="username" class="form-control form-control-lg" id="exampleInputUsername1" placeholder="Phone Number as account">
                   </div>
                   <div class="form-group">
                     <input type="email" name="email" class="form-control form-control-lg" id="exampleInputEmail1" placeholder="Email">
                   </div>
                   <div class="form-group">
-                    <input type="password" class="form-control form-control-lg" id="exampleInputPassword1" placeholder="Password">
+                    <input type="password"  name="password" class="form-control form-control-lg" id="exampleInputPassword1" placeholder="Password">
                   </div>
 
                   <div class="form-group">
-                    <input type="password" name="password2" class="form-control form-control-lg" id="" placeholder="Re enter password">
+                    <input type="password" name="password1" class="form-control form-control-lg" id="" placeholder="Re enter password">
                   </div>
                  
                  

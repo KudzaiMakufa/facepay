@@ -14,26 +14,46 @@ Including another URLconf
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
 from django.contrib import admin
-from django.urls import path
-from transactions.views import home_view , create_transaction , view_transaction , statement_transaction, airtime_transaction
+from django.urls import path, include 
+from transactions.views import home_view , create_transaction , view_transaction , airtime_transaction
 from face.views import home_face ,  register ,login
 from account.views import balance
+from statement import views
+# REST API 
+from rest_framework import routers
+from django.conf.urls import url
+
+# this is where url for application rest us added 
+router = routers.DefaultRouter()
+router.register(r'statement', views.UserViewSet)#eg views.ViewDAta etc 
+
 
 urlpatterns = [
     #face
-    path('', home_view ,name='home'),
-    path('face/', home_face ,name='face'),
+    path('', login ,name='login'),
+    path('rest/', include(router.urls)),
+    path('face/', home_face , name='face'),
     path('register/', register ,name='face'),
     path('login/', login ,name='face'),
     #transactions
     path('transaction/create/', create_transaction),
     path('transaction/view/', view_transaction),
-    path('transaction/statement/', statement_transaction),
-     path('transaction/airtime/', airtime_transaction),
+    path('transaction/airtime/', airtime_transaction),
     #admin
     path('admin/', admin.site.urls),
     #account
     path('account/balance/', balance ,name='account'),
+    # statement
+    path('statement/view/', views.view_statement ,name='statement'),
+
+    # REST API 
+    path('apiauth/', include('rest_framework.urls', namespace='rest_framework')),
+    # path(r'apiauth/', include('rest_framework.urls'),namespace='rest_framework'))
+
+    # test two api 
+    
+    url(r'^', include('api.urls')),
+    
 
    
     
