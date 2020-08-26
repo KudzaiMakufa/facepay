@@ -17,7 +17,7 @@ Developed using the Python Django Framework
 
 1. Installation
 2. setup the python 
-3. install dependencis 
+3. install dependencies 
 5. navigate to scr/bipay
 6. run python manage.py runserver 
 7. Dependencies
