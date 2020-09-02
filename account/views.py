@@ -8,7 +8,7 @@ def balance(request):
     account = Balance()
 
     
-    amount = account.check_balance(request.user.id).amount
+    amount = account.check_balance(request.user.username).amount
 
     context = {
             'amount' : amount

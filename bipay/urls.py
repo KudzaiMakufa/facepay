@@ -16,7 +16,7 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path, include 
 from transactions.views import home_view , create_transaction , view_transaction , airtime_transaction
-from face.views import home_face ,  register ,login
+from face.views import home_face ,  register ,userlogin , userlogout
 from account.views import balance
 from statement import views
 # REST API 
@@ -30,11 +30,12 @@ router.register(r'statement', views.UserViewSet)#eg views.ViewDAta etc
 
 urlpatterns = [
     #face
-    path('', login ,name='login'),
+    path('', userlogin ,name='login'),
     path('rest/', include(router.urls)),
     path('face/', home_face , name='face'),
     path('register/', register ,name='face'),
-    path('login/', login ,name='face'),
+    path('login/', userlogin ,name='face'),
+    path('face/logout/', userlogout ,name='face'),
     #transactions
     path('transaction/create/', create_transaction),
     path('transaction/view/', view_transaction),
@@ -50,8 +51,7 @@ urlpatterns = [
     path('apiauth/', include('rest_framework.urls', namespace='rest_framework')),
     # path(r'apiauth/', include('rest_framework.urls'),namespace='rest_framework'))
 
-    # test two api 
-    
+    # test two api   
     url(r'^', include('api.urls')),
     
 

@@ -36,7 +36,7 @@ def airtime_transaction(request):
             # BulkSMS Webservice username for sending SMS.
             # Get it from User Configuration. Its case sensitive.
             account = Balance()
-            balance = account.check_balance(request.user.id).amount
+            balance = account.check_balance(request.user.username).amount
             if balance < amount:
                 messages.add_message(request, messages.ERROR, ' insufficient balance')
                 return redirect('/transaction/airtime/') 
@@ -67,16 +67,16 @@ def airtime_transaction(request):
                 http_response = urlopen(ws_str).read()
 
                 
-
+                account.transferout(account = request.user.username , amount = amount)
 
                 statement = Balance()
         
                 statementdata = {
-                    "user_id":request.user.id ,
+                    
                     "operation":"Airtime",
                     "amount":amount ,
                     "date":datetime.datetime.now() ,
-                    "account":number 
+                    "account": request.user.username ,
                 }
                 statement.statementcreate(statementdata)
                 messages.add_message(request, messages.INFO, ' Airtime Transfer Successful')
@@ -89,7 +89,7 @@ def airtime_transaction(request):
 
 
 def view_transaction(request):
-    transactions = Transaction.objects.all()
+    transactions = Transaction.objects.filter(user_id = request.user.id)
     context = {
         'transactions':transactions
     }
@@ -104,43 +104,59 @@ def create_transaction(request):
         
 
         if create_form.is_valid():
-            # print(type(create_form.cleaned_data['amount']))
-            # print(request.username)
-            data = request.POST.get('imagebase64').partition(",")[2]
+            
            
+
+            data = request.POST.get('imagebase64').partition(",")[2]
+                 
             # call to authentication class 
             facecall = Facecall()
             if(facecall.face_authenticate(data)):
-                create_form.cleaned_data['user_id'] = 1
+                create_form.cleaned_data['user_id'] = request.user.id
 
-                # check available abalnce 
+                # check available balance 
                 account = Balance()
-                amount = account.check_balance(request.user.id).amount
+                
+                amount = account.check_balance(request.user.username).amount
                 if amount < create_form.cleaned_data['amount']:
                     messages.add_message(request, messages.ERROR, ' insufficient balance')
                     return redirect('/transaction/create/') 
                 else:
-                    
-                    account.transferout(user_id = request.user.id , amount = create_form.cleaned_data['amount'])
+
+                    # transfer money out of account 
+                    account.transferout(account = request.user.username , amount = create_form.cleaned_data['amount'])
+                    # transfer money into recipient account 
+                    account.transferin(account = request.POST.get('account') , amount = create_form.cleaned_data['amount'])
                     # record statement
+                    
+                    
                     statement = Balance()
-      
+                    # add statement to sender account 
+
                     statementdata = {
-                        "user_id":request.user.id ,
-                        "operation":"transfer",
+                 
+                        "operation":"Send Money",
                         "amount":request.POST.get('amount') ,
                         "date":datetime.datetime.now() ,
-                        "account":request.POST.get('account') 
+                        "account":request.user.username ,
                     }
                     statement.statementcreate(statementdata)
 
-                    messages.add_message(request, messages.INFO, ' transfer successful')
-                    return redirect('/transaction/create/') 
-    
-                    
+                    # add statement to reciever account 
+                    statementdata = {
+            
+                        "operation":"Received Money",
+                        "amount":request.POST.get('amount') ,
+                        "date":datetime.datetime.now() ,
+                        "account":request.POST.get('account')
+                    }
+                    statement.statementcreate(statementdata)
 
-                Transaction.objects.create(**create_form.cleaned_data)
-                create_form = TransactionCreate()
+                    Transaction.objects.create(**create_form.cleaned_data)
+                    create_form = TransactionCreate()
+
+                    messages.add_message(request, messages.INFO, ' transfer successful')
+                    return redirect('/transaction/create/')
                 
             else:
                 print("authentication failure")

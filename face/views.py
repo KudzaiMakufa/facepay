@@ -5,7 +5,7 @@ from deepface import DeepFace
 import pandas as pd
 import base64
 from django.conf import settings
-from django.contrib.auth import authenticate
+from django.contrib.auth import authenticate , login , logout
 from django.contrib import messages
 from django.contrib.auth.models import User
 from account.models import Account
@@ -26,7 +26,7 @@ def face_authenticate(imageBase):
             f.write(imgdata)
             
         # compare and a
-        df = DeepFace.find(img_path = settings.MEDIA_ROOT+'img1.jpg', db_path = settings.MEDIA_ROOT+'sets')
+        df = DeepFace.find(img_path = settings.MEDIA_ROOT+'temp.jpg', db_path = settings.MEDIA_ROOT+'sets')
 
         if df.shape[0] > 0 :
             matched  = df.iloc[0].identity
@@ -46,13 +46,25 @@ def register(request):
         else :
             
             if User.objects.create_user(request.POST.get('username'),request.POST.get('email'),request.POST.get('password')) and saveImage(data,request.POST.get('username')):
-                account = Account(user_id = request.user.id , amount = 0)
-                account.save() 
-                messages.add_message(request, messages.INFO, ' account created') 
+                user = authenticate(request , username=request.POST.get('username'),password = request.POST.get('password'))
+                
+               
+                if user is not None:
+               
+                     # create account 
+                    account = Account(account = request.POST.get('username') , amount = 0 )
+                    account.save() 
+                    
+                else:
+                    print("failed to save ")
+                    pass
+
+                
+                
                 
 
-                # create account 
-                
+
+                messages.add_message(request, messages.INFO, ' account created') 
                 
                 # save images to sets directory 
                 return redirect('/login/')
@@ -62,18 +74,24 @@ def register(request):
 
     context = {}
     return render(request , "face/register.html" , context)
-def login(request):
+def userlogout(request):
+    logout(request)
+    return redirect('/login/')
+def userlogin(request):
     if request.method == "POST":
    
 
         
         user = authenticate(username=request.POST.get('email'),password = request.POST.get('password'))
+       
+        print(user)
         data = request.POST.get('imagebase64').partition(",")[2]
         
            
             # call to authentication class 
         
         if user is not None and face_authenticate(data):
+            login(request , user)
             return redirect('/transaction/view/')
         # A backend authenticated the credentials
         else:
@@ -87,7 +105,8 @@ def saveImage(imageBase,name):
 
     saved  =  False
     imgdata = base64.b64decode(data)
-    filename = "{}"+name+".jpg".format(settings.MEDIA_ROOT+"sets/")
+    filename = name+".jpg".format(settings.MEDIA_ROOT+"sets/")
+    # filename = name+".jpg".format(settings.MEDIA_ROOT+"sets/")
     
     with open(filename, 'wb') as f:
         if(f.write(imgdata)) :

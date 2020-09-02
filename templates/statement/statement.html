@@ -1,0 +1,46 @@
+sta{% extends 'base.html' %}
+
+{% block content %}
+
+
+
+
+<div class="page-header">
+    <h3 class="page-title">
+        <span class="page-title-icon bg-gradient-primary text-white mr-2">
+          <i class="mdi mdi-menu"></i>
+        </span> Listing Statements </h3>
+            <nav aria-label="breadcrumb">
+        	    <ul class="breadcrumb">
+        	      <li class="breadcrumb-item active" aria-current="page">
+        	        <span></span>statement <i class="mdi mdi-alert-circle-outline icon-sm text-primary align-middle"></i>
+    	          </li>
+                </ul>
+              </nav>
+			</div>
+
+      {% for statement in statements %}
+
+        <div class="col-md-12	 grid-margin stretch-card">
+            <div class="card">
+                    <div class="card-body">
+                        <h4 class="card-title">{{statement.date}}</h4>
+                        <p class="card-description"></p>
+                        <ul class="list-ticked">
+                          <li><b>Operation:</b> {{statement.operation}} </li>
+                          <li><b>Amount:</b> ${{statement.amount}}</li>
+                          <li><b>Recipient: </b> {{statement.account}}</li>
+                          
+              </ul>
+            </div>
+            
+            
+            </div>
+        </div>
+      {% endfor %}
+
+  
+
+
+
+{% endblock %}
