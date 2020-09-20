@@ -20,21 +20,24 @@ def face_authenticate(imageBase):
 
         facematch =  False
         imgdata = base64.b64decode(data)
-        filename = "{}temp.jpg".format(settings.MEDIA_ROOT)
+        filename = settings.MEDIA_ROOT+"temp.jpg"
+        # filename = "temp.jpg".format(settings.MEDIA_ROOT)
         
         with open(filename, 'wb') as f:
             f.write(imgdata)
             
         # compare and a
-        df = DeepFace.find(img_path = settings.MEDIA_ROOT+'temp.jpg', db_path = settings.MEDIA_ROOT+'sets')
+        try:
+            df = DeepFace.find(img_path = settings.MEDIA_ROOT+'temp.jpg', db_path = settings.MEDIA_ROOT+'sets')
 
-        if df.shape[0] > 0 :
-            matched  = df.iloc[0].identity
-            
-            facematch = True
-        else:
+            if df.shape[0] > 0 :
+                matched  = df.iloc[0].identity
+                
+                facematch = True
+            else:
+                facematch = False
+        except:
             facematch = False
-        
         return facematch
 def register(request):
     if request.method == "POST":
@@ -52,7 +55,7 @@ def register(request):
                 if user is not None:
                
                      # create account 
-                    account = Account(account = request.POST.get('username') , amount = 0 )
+                    account = Account(account = request.POST.get('username') , amount = 200 )
                     account.save() 
                     
                 else:
@@ -90,11 +93,17 @@ def userlogin(request):
            
             # call to authentication class 
         
-        if user is not None and face_authenticate(data):
+        if user is None:
+            messages.add_message(request, messages.ERROR, 'Incorrect password')
+          # A backend authenticated the credentials
+        elif face_authenticate(data) == False:
+            messages.add_message(request, messages.ERROR, 'Face not detected')
+        elif face_authenticate(data):
             login(request , user)
             return redirect('/transaction/view/')
-        # A backend authenticated the credentials
+      
         else:
+
         # No backend authenticated the credentials
             messages.add_message(request, messages.ERROR, 'invalid email or password')
 
@@ -105,7 +114,8 @@ def saveImage(imageBase,name):
 
     saved  =  False
     imgdata = base64.b64decode(data)
-    filename = name+".jpg".format(settings.MEDIA_ROOT+"sets/")
+    filename = settings.MEDIA_ROOT+'sets/'+name+".jpg"
+    # filename = name+".jpg".format(settings.MEDIA_ROOT+"sets/")
     # filename = name+".jpg".format(settings.MEDIA_ROOT+"sets/")
     
     with open(filename, 'wb') as f:

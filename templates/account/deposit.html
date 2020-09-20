@@ -1,0 +1,63 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<h1>Deposit Money</h1>
+
+
+
+   
+
+
+<form action="" method="POST" class="form-horizontal"> {% csrf_token %}
+   
+
+	<fieldset>
+		
+		<div class="form-group">
+            <label for="amount" class="control-label"></label>
+			
+            <input type="number" name="amount" class="col-md-4 form-control" placeholder="Amount">
+				
+
+        </div>
+        
+        <div class="form-group">
+            <label for="Date" class="control-label"></label>
+			
+            <input type="date" name="date" class="col-md-4 form-control" placeholder="Amount">
+				
+
+        </div>
+        
+        <div class="form-group">
+            <label for="Acount" class="control-label"></label>
+			
+            <input type="number" name="account" class="col-md-4 form-control" placeholder="Account No:">
+				
+
+		</div>
+ 
+	
+	
+		<div class="form-group">
+            <label class='control-label'>&nbsp;</label>
+            <input type="button" value="save" class="btn btn-primary" onclick="viewVendor()" 'id'="pickerNo">
+            <!-- <span class="input-group-addon libspicker" onclick="viewVendor()" 'id'="pickerNo">Save</span> -->
+			</div>
+	</fieldset>
+
+    <div align="center">
+        {% include "face/modal_face.html" %}
+    </div>
+</form>
+
+<script>
+    function viewVendor()
+         {
+            $('#viewTypes').modal();
+        }
+</script>
+
+
+{% endblock %}
+

@@ -23,7 +23,7 @@ def view_statement(request):
     statement = None 
    
     try:
-        statement = Statement.objects.filter(account = request.user.username)
+        statement = Statement.objects.filter(account = request.user.username).order_by('-id')
     except :
         pass
     context = {

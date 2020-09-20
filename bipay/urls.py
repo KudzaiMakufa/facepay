@@ -17,7 +17,7 @@ from django.contrib import admin
 from django.urls import path, include 
 from transactions.views import home_view , create_transaction , view_transaction , airtime_transaction
 from face.views import home_face ,  register ,userlogin , userlogout
-from account.views import balance
+from account.views import balance , deposit
 from statement import views
 # REST API 
 from rest_framework import routers
@@ -44,6 +44,7 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     #account
     path('account/balance/', balance ,name='account'),
+    path('account/deposit/', deposit ,name='deposit'),
     # statement
     path('statement/view/', views.view_statement ,name='statement'),
 
